@@ -59,7 +59,7 @@
         font-weight: 700;
         border: none;
         text-align: center;
-        margin-left: 30px;
+        margin-left: 10px;
         margin-top: 10px;
         cursor: pointer;
         height: 30px;
@@ -67,54 +67,30 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <!-- <div class="container">
       <div class="product-list">
-        <div class="row">
-          <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-              <div class="product-img">
-                <img
-                  src="https://www.91-img.com/pictures/laptops/asus/asus-x552cl-sx019d-core-i3-3rd-gen-4-gb-500-gb-dos-1-gb-61721-large-1.jpg"
-                />
-              </div>
-              <div class="product-bottom">
-                <div class="product-name">Asus X552CL-SX019D Laptop</div>
-                <div class="price">32,000</div>
-                <button class="blue-btn">Add to cart</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-              <div class="product-img">
-                <img
-                  src="https://images-na.ssl-images-amazon.com/images/I/81nreGN5qQL._SL1500_.jpg"
-                />
-              </div>
-              <div class="product-bottom">
-                <div class="product-name">
-                  ASUS X507 Core i5 - 8th Gen 15.6"
-                </div>
-                <div class="price">30,000</div>
-                <button class="blue-btn">Add to cart</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-              <div class="product-img">
-                <img
-                  src="https://images-na.ssl-images-amazon.com/images/I/81RrcHvDGbL._SY355_.jpg"
-                />
-              </div>
-              <div class="product-bottom">
-                <div class="product-name">ASUS VivoBook S400CA</div>
-                <div class="price">45,000</div>
-                <button class="blue-btn">Add to cart</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6">
+        <div class="row"></div>
+      </div>
+    </div> -->
+    <input type="text" id="min" onkeyup="updateBox()" />
+    <input type="text" id="max" onkeyup="updateBox()" />
+    <div id="productlist"></div>
+    <ul id="cart"></ul>
+
+    <script>
+      let cart = [];
+      let products = [
+        { id: 1, title: "Product 1", color: "red", price: 25000 },
+        { id: 2, title: "Product 2", color: "blue", price: 75000 },
+        { id: 3, title: "Product 3", color: "green", price: 10000 },
+        { id: 4, title: "Product 4", color: "red", price: 120000 },
+      ];
+
+      function fillBox(filterProducts) {
+        let parent = document.getElementById("productlist");
+        parent.innerHTML = "";
+        for (let i = 0; i < filterProducts.length; i++) {
+          parent.innerHTML += `<div class="col-md-3 col-sm-6">
             <div class="white-box">
               <div class="product-img">
                 <img
@@ -122,14 +98,96 @@
                 />
               </div>
               <div class="product-bottom">
-                <div class="product-name">Asus laptops</div>
-                <div class="price">50,000</div>
-                <button class="blue-btn">Add to cart</button>
+                <div class="product-name">${filterProducts[i].id}</div>
+                <div class="product-name">${filterProducts[i].title}</div>
+                <div class="product-name">${filterProducts[i].color}</div>
+                <div class="price">${filterProducts[i].price}</div>
+                <button class="blue-btn" onclick="addToCart(${filterProducts[i].id})">Add to cart</button>
+                <span data-count-id="${filterProducts[i].id}">0</span>
+                <button class="blue-btn" onclick="minusFromCart(${filterProducts[i].id})">Remove from cart</button>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div>`;
+        }
+      }
+
+      fillBox(products);
+
+      function updateBox() {
+        let minP = Number(document.getElementById("min").value);
+        let maxP = Number(document.getElementById("max").value);
+        console.log(minP);
+        console.log(maxP);
+        let pf = products.filter(function (item) {
+          if (minP == 0 && maxP == 0) return true;
+          else if (minP == 0 && maxP != 0) return item.price < maxP;
+          else if (maxP == 0 && minP != 0) return item.price > minP;
+          else return item.price < maxP && item.price > minP;
+        });
+
+        fillBox(pf);
+      }
+
+      function addToCart(id) {
+        let productIndex = products.findIndex(function (item) {
+          return item.id == id;
+        });
+
+        let cartIndex = cart.findIndex(function (item) {
+          return item.product_id == id;
+        });
+        if (cartIndex == -1) {
+          cart.push({
+            count: 1,
+            product_title: products[productIndex].title,
+            product_id: products[productIndex].id,
+            product_price: products[productIndex].price,
+          });
+          document.querySelector(`[data-count-id="${id}"]`).innerHTML = 1;
+        } else {
+          cart[cartIndex].count += 1;
+          document.querySelector(`[data-count-id="${id}"]`).innerHTML =
+            cart[cartIndex].count;
+        }
+
+        updateCart();
+      }
+
+      function minusFromCart(id) {
+        console.log("hi");
+        let cartIndex = cart.findIndex(function (item) {
+          return item.product_id == id;
+        });
+        if (cartIndex == -1) {
+          alert("mahsool mored nazar vojod nadarad");
+        } else {
+          if (cart[cartIndex].count > 1) {
+            cart[cartIndex].count -= 1;
+            document.querySelector(`[data-count-id="${id}"]`).innerHTML =
+              cart[cartIndex].count;
+          } else if (cart[cartIndex].count == 1) {
+            cart.splice(cartIndex, 1);
+            document.querySelector(`[data-count-id="${id}"]`).innerHTML = 0;
+          }
+        }
+        updateCart();
+      }
+
+      function updateCart() {
+        document.getElementById("cart").innerHTML = "";
+        let totalPrice = 0;
+        cart.forEach((item) => {
+          document.getElementById("cart").innerHTML += `<li>${
+            item.product_title
+          } -- ${item.count} -- ${item.product_price} -->${
+            item.product_price * item.count
+          } </li>`;
+          totalPrice += item.product_price * item.count;
+        });
+        document.getElementById(
+          "cart"
+        ).innerHTML += `<li>total price : ${totalPrice}</li>`;
+      }
+    </script>
   </body>
 </html>
