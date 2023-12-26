@@ -66,20 +66,27 @@
       #cart {
         border: 1px dashed gray;
         width: 60%;
-        margin-top: 30px;
+        margin-top: 40px;
         font-size: 25px;
         font-weight: 500;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.4);
+        margin: 30px auto;
       }
       .updateCart {
         list-style: none;
         border: 1px solid gray;
         border-radius: 5px;
         margin-top: 20px;
-        margin-top: 20px;
+        margin-bottom: 20px;
         padding: 10px 10px;
         box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.4);
         width: 80%;
         font-size: larger;
+        text-align: center;
+      }
+      .minmax {
+        padding: 20px;
+        margin-top: 30px;
       }
     </style>
   </head>
@@ -89,8 +96,12 @@
         <div class="row"></div>
       </div>
     </div> -->
-    <input type="text" id="min" onkeyup="updateBox()" />
-    <input type="text" id="max" onkeyup="updateBox()" />
+    <div class="minmax">
+      <label for="min">Minimum</label>
+      <input type="text" id="min" onkeyup="updateBox()" />
+      <label for="max">Maximum</label
+      ><input type="text" id="max" onkeyup="updateBox()" />
+    </div>
     <div id="productlist"></div>
     <ul id="cart">
       Product Cart
