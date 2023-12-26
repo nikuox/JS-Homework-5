@@ -9,8 +9,6 @@
       rel="stylesheet"
       id="bootstrap-css"
     />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <style>
       .product-list {
@@ -64,6 +62,25 @@
         cursor: pointer;
         height: 30px;
       }
+
+      #cart {
+        border: 1px dashed gray;
+        width: 60%;
+        margin-top: 30px;
+        font-size: 25px;
+        font-weight: 500;
+      }
+      .updateCart {
+        list-style: none;
+        border: 1px solid gray;
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-top: 20px;
+        padding: 10px 10px;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.4);
+        width: 80%;
+        font-size: larger;
+      }
     </style>
   </head>
   <body>
@@ -75,7 +92,9 @@
     <input type="text" id="min" onkeyup="updateBox()" />
     <input type="text" id="max" onkeyup="updateBox()" />
     <div id="productlist"></div>
-    <ul id="cart"></ul>
+    <ul id="cart">
+      Product Cart
+    </ul>
 
     <script>
       let cart = [];
@@ -159,7 +178,7 @@
           return item.product_id == id;
         });
         if (cartIndex == -1) {
-          alert("mahsool mored nazar vojod nadarad");
+          alert("Product Unavailable!");
         } else {
           if (cart[cartIndex].count > 1) {
             cart[cartIndex].count -= 1;
@@ -177,16 +196,18 @@
         document.getElementById("cart").innerHTML = "";
         let totalPrice = 0;
         cart.forEach((item) => {
-          document.getElementById("cart").innerHTML += `<li>${
-            item.product_title
-          } -- ${item.count} -- ${item.product_price} -->${
+          document.getElementById(
+            "cart"
+          ).innerHTML += `<li class="updateCart">${item.product_title} --- ${
+            item.count
+          } --- ${item.product_price} --->${
             item.product_price * item.count
           } </li>`;
           totalPrice += item.product_price * item.count;
         });
         document.getElementById(
           "cart"
-        ).innerHTML += `<li>total price : ${totalPrice}</li>`;
+        ).innerHTML += `<li class="updateCart">Total price : ${totalPrice}</li>`;
       }
     </script>
   </body>
